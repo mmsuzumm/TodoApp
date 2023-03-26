@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styles from './TodoForm.module.css';
 import isEmpty from '../../utils/checkEmptyString';
+import Button from '../../UI/Button';
 
 export default function TodoForm({ addTodo }) {
   const [todoInput, setTodoInput] = useState('');
@@ -12,9 +13,7 @@ export default function TodoForm({ addTodo }) {
 
   const onSubmitHandler = (event) => {
     event.preventDefault();
-    isEmpty(todoInput)
-      ? updateTodo()
-      : console.log('Error: Empty string');
+    isEmpty(todoInput) ? updateTodo() : console.log('Error: Empty string');
   };
 
   return (
@@ -27,7 +26,9 @@ export default function TodoForm({ addTodo }) {
             setTodoInput(event.target.value);
           }}
         ></input>
-        <button type="submit">Submit</button>
+        <Button type="submit" title="Submit">
+          Submit
+        </Button>
       </form>
     </div>
   );
