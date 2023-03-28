@@ -10,6 +10,7 @@ export default function TodoPage() {
   const GET_API = 'http://127.0.0.1:5000/todos';
   const INSERT_API = 'http://127.0.0.1:5000/todo_insert';
   const DELETE_API = 'http://127.0.0.1:5000/todo_delete';
+  const CLEAR_API = 'http://127.0.0.1:5000/todo_clear';
 
   useEffect(() => {
     fetch(GET_API)
@@ -41,7 +42,21 @@ export default function TodoPage() {
     };
     fetch(DELETE_API, requestOptions)
       .then((response) => response.json())
-      .then((data) => setTodos(todos.filter((todo) => todo.id !== data[0].id))); // data[0] == object like {id: 1, user_id: 1}
+      .then((data) => {
+        setTodos(todos.filter((todo) => todo.id !== data[0].id));
+      }); // data[0] == object like {id: 1, user_id: 1}
+  };
+
+  const clearTodos = () => {
+    const requestOptions = {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    fetch(CLEAR_API, requestOptions)
+      .then((response) => response.json())
+      .then((data) => console.log(data));
   };
 
   const addTodoHandler = (todoText) => {
@@ -66,7 +81,9 @@ export default function TodoPage() {
     deleteTodo(index);
   };
 
+  //delete all todos from db
   const resetTodoHandler = () => {
+    clearTodos();
     setTodos([]);
   };
 
