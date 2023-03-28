@@ -1,6 +1,7 @@
-'''Query to select todos'''
+'''Query to delete todo or todos'''
 
-def query(user_id: str='NULL'):
+def query(index: int | list, 
+          user_id: str='NULL'):
     if user_id.lower() == 'null':
         user_id = 'is null'
     else:
@@ -9,9 +10,8 @@ def query(user_id: str='NULL'):
 
     return(
     f'''
-    SELECT id, user_id, is_complited, todo_text 
-    FROM todos
-    WHERE user_id {user_id};
+    DELETE FROM todos where id in ({index})
+    RETURNING id, user_id
     '''
     )
 

@@ -1,42 +1,55 @@
-import { useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import { useEffect, useState } from 'react';
 import TodosActions from './TodosActions';
 import TodoForm from './TodoForm';
 import TodoList from './TodoList';
 import styles from './TodoPage.module.css';
 
 export default function TodoPage() {
-  // const TODOS_API = 'http://127.0.0.1:5000/todos';
-  // const TODOS_API_INSERT = 'http://127.0.0.1:5000/todos_insert';
-  // useEffect(() => {
-  //   fetch(TODOS_API)
-  //     .then((response) => response.json())
-  //     .then((json) => {
-  //       setTodos(json);
-  //     })
-  //     .catch((error) => console.log(error));
-  // }, []);
-  // const addTodoHandler = (todoText) => {
-  //   const headers = {
-  //     'Content-type': 'application/json',
-  //   };
-  //   fetch(TODOS_API_INSERT, {
-  //     method: 'POST',
-  //     body: JSON.stringify(todoText),
-  //     headers: headers,
-  //   });
-  //   console.log();
-  // };
-
   const [todos, setTodos] = useState([]);
+
+  const GET_API = 'http://127.0.0.1:5000/todos';
+  const INSERT_API = 'http://127.0.0.1:5000/todo_insert';
+  const DELETE_API = 'http://127.0.0.1:5000/todo_delete';
+
+  useEffect(() => {
+    fetch(GET_API)
+      .then((response) => response.json())
+      .then((json) => setTodos(json));
+  }, []);
+
+  const insertTodo = (todo) => {
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(todo),
+    };
+    fetch(INSERT_API, requestOptions)
+      .then((response) => response.json())
+      .then((data) => setTodos([...todos, data[0]]));
+  };
+
+  const deleteTodo = (id) => {
+    const dataToSend = { id };
+    const requestOptions = {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dataToSend),
+    };
+    fetch(DELETE_API, requestOptions)
+      .then((response) => response.json())
+      .then((data) => setTodos(todos.filter((todo) => todo.id !== data[0].id))); // data[0] == object like {id: 1, user_id: 1}
+  };
 
   const addTodoHandler = (todoText) => {
     const newTodo = {
       todoText,
       isComplited: false,
-      id: uuidv4(),
     };
-    setTodos([...todos, newTodo]);
+    insertTodo(newTodo);
   };
 
   const toggleTodoHandler = (index) => {
@@ -50,7 +63,7 @@ export default function TodoPage() {
   };
 
   const deleteTodoHandler = (index) => {
-    setTodos(todos.filter((todo) => todo.id !== index));
+    deleteTodo(index);
   };
 
   const resetTodoHandler = () => {
