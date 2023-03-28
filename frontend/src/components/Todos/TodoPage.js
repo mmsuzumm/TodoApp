@@ -63,16 +63,16 @@ export default function TodoPage() {
   const addTodoHandler = (todoText) => {
     const newTodo = {
       todoText,
-      isComplited: false,
+      isCompleted: false,
     };
     insertTodo(newTodo);
   };
 
   const toggleTodoHandler = (todo) => {
     const id = todo.id;
-    const isComplited = todo.isComplited;
+    const isCompleted = todo.isCompleted;
 
-    const dataToSend = { id, isComplited };
+    const dataToSend = { id, isCompleted };
 
     const requestOptions = {
       method: 'PATCH',
@@ -87,7 +87,7 @@ export default function TodoPage() {
         setTodos(
           todos.map((todo) =>
             data[0].id === todo.id
-              ? { ...todo, isComplited: !todo.isComplited }
+              ? { ...todo, isCompleted: !todo.isCompleted }
               : { ...todo }
           )
         );
@@ -105,12 +105,12 @@ export default function TodoPage() {
   };
 
   const deleteCompletedTodosHandler = () => {
-    const complited_todos = todos.filter((todo) => todo.isComplited);
+    const completed_todos = todos.filter((todo) => todo.isCompleted);
 
-    deleteTodo(complited_todos.map((todo) => todo.id));
+    deleteTodo(completed_todos.map((todo) => todo.id));
   };
 
-  const completedTodosCount = todos.filter((todo) => todo.isComplited).length;
+  const completedTodosCount = todos.filter((todo) => todo.isCompleted).length;
 
   return (
     <div className={styles.todoPageContainer}>

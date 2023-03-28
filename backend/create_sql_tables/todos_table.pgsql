@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS todos (
     id BIGINT UNIQUE NOT NULL PRIMARY KEY, -- if you have PostgreSQL 7.3 or later, you can use the bigserial data type
     user_id INT, --later set not null
-    is_complited BOOLEAN NOT NULL,
+    is_completed BOOLEAN NOT NULL,
     todo_text TEXT NOT NULL
 );
 

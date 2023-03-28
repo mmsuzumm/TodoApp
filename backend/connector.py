@@ -34,10 +34,10 @@ def todo_writer(is_completed: str, todo_text: str) -> str:
     conn.close()
     return format_converter(new_record)
 
-def todo_status_updater(id: int, is_complited: bool) -> str:
+def todo_status_updater(id: int, is_completed: bool) -> str:
     print('start_update')
     conn, cur = open_connection()
-    cur.execute(update_status.query(id, is_complited))
+    cur.execute(update_status.query(id, is_completed))
     conn.commit()
     response = cur.fetchall()
     cur.close()

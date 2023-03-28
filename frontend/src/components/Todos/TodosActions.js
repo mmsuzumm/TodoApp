@@ -3,7 +3,6 @@ import { FaRegTrashAlt } from 'react-icons/fa';
 import styles from './TodosActions.module.css';
 import Button from '../../UI/Button';
 export default function TodosActions({
-  resetTodo,
   deleteCompletedTodos,
   completedTodosExists,
   setActive,
@@ -14,7 +13,7 @@ export default function TodosActions({
         <RiRefreshLine />
       </Button>
       <Button
-        title="Clear complited todos"
+        title="Clear completed todos"
         onClick={() => deleteCompletedTodos()}
         disabled={!completedTodosExists}
       >

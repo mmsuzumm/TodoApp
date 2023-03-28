@@ -1,6 +1,6 @@
 '''Query to insert todo'''
 
-def query(is_complited: str,
+def query(is_completed: str,
           todo_text: str,
           user_id: str='NULL') -> str:
     if user_id.lower() == 'null':
@@ -11,9 +11,9 @@ def query(is_complited: str,
 
     return(
     f'''
-    INSERT INTO todos (is_complited, todo_text) 
-    VALUES ({is_complited}, '{todo_text}') 
-    RETURNING id, user_id, is_complited, todo_text;
+    INSERT INTO todos (is_completed, todo_text) 
+    VALUES ({is_completed}, '{todo_text}') 
+    RETURNING id, user_id, is_completed, todo_text;
     '''
     )
 

@@ -22,7 +22,7 @@ def todos() -> json:
 @app.route("/todo_insert", methods=['POST'])
 def todo_insert() -> json:
     received_json = json.loads(request.data.decode('utf8'))
-    is_completed = received_json['isComplited']
+    is_completed = received_json['isCompleted']
     todo_text = received_json['todoText']
     data = todo_writer(is_completed, todo_text)
     response = app.response_class(
@@ -60,7 +60,7 @@ def todo_clear() -> str:
 def todo_update_status() -> str:
     received_json = json.loads(request.data.decode('utf8'))
     id = received_json['id']
-    is_completed = received_json['isComplited']
+    is_completed = received_json['isCompleted']
 
     data = todo_status_updater(id, is_completed)
     response = app.response_class(

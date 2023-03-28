@@ -6,7 +6,7 @@ export default function Todo({ todo, deleteTodo, toggleTodo }) {
   return (
     <div
       className={`${styles.todoContainer} ${
-        todo.isComplited ? styles.completedTodo : ''
+        todo.isCompleted ? styles.completedTodo : ''
       }`}
     >
       <RiTodoLine className={styles.todoIcon} />

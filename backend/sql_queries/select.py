@@ -9,7 +9,7 @@ def query(user_id: str='NULL') -> str:
 
     return(
     f'''
-    SELECT id, user_id, is_complited, todo_text 
+    SELECT id, user_id, is_completed, todo_text 
     FROM todos
     WHERE user_id {user_id}
     ORDER BY id;

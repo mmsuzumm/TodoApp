@@ -1,13 +1,13 @@
 '''Query to update is_completed for todo'''
 
 def query(id: int,
-          is_complited: bool,
+          is_completed: bool,
           user_id: str='NULL') -> str:
     
-    if is_complited:
-        is_complited = False
+    if is_completed:
+        is_completed = False
     else:
-        is_complited = True
+        is_completed = True
         
     if user_id.lower() == 'null':
         user_id = 'is null'
@@ -18,8 +18,8 @@ def query(id: int,
     return(
     f'''
     UPDATE todos 
-    SET is_complited = {is_complited} where id = {id}
-    RETURNING id, is_complited
+    SET is_completed = {is_completed} where id = {id}
+    RETURNING id, is_completed
     '''
     )
 
