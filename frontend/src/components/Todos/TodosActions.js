@@ -6,10 +6,11 @@ export default function TodosActions({
   resetTodo,
   deleteCompletedTodos,
   completedTodosExists,
+  setActive,
 }) {
   return (
     <div className={styles.todosActionsContainer}>
-      <Button title="Reset todos" onClick={() => resetTodo()}>
+      <Button title="Reset todos" onClick={() => setActive(true)}>
         <RiRefreshLine />
       </Button>
       <Button

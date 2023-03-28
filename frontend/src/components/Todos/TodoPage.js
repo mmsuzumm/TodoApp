@@ -3,9 +3,11 @@ import TodosActions from './TodosActions';
 import TodoForm from './TodoForm';
 import TodoList from './TodoList';
 import styles from './TodoPage.module.css';
+import ClearAllConfirmation from './ClearAllConfirmation';
 
 export default function TodoPage() {
   const [todos, setTodos] = useState([]);
+  const [modalActive, setModalActive] = useState(false);
 
   const GET_API = 'http://127.0.0.1:5000/todos';
   const INSERT_API = 'http://127.0.0.1:5000/todo_insert';
@@ -97,11 +99,13 @@ export default function TodoPage() {
     <div className={styles.todoPageContainer}>
       <h1>Todo App</h1>
       <TodoForm addTodo={addTodoHandler} />
+      <ClearAllConfirmation active={modalActive} setActive={setModalActive} resetTodo={resetTodoHandler}/>
       {!!todos.length && (
         <TodosActions
           completedTodosExists={!!completedTodosCount}
           resetTodo={resetTodoHandler}
           deleteCompletedTodos={deleteCompletedTodosHandler}
+          setActive={setModalActive}
         />
       )}
       <TodoList
