@@ -20,7 +20,7 @@ export default function Todo({ todo, deleteTodo, toggleTodo }) {
       <FaCheck
         className={styles.checkIcon}
         onClick={() => {
-          toggleTodo(todo.id);
+          toggleTodo(todo);
         }}
       />
     </div>

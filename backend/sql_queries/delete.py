@@ -1,7 +1,7 @@
 '''Query to delete todo or todos'''
 
 def query(index: int | list, 
-          user_id: str='NULL'):
+          user_id: str='NULL') -> str:
     if user_id.lower() == 'null':
         user_id = 'is null'
     else:

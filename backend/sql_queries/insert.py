@@ -2,7 +2,7 @@
 
 def query(is_complited: str,
           todo_text: str,
-          user_id: str='NULL'):
+          user_id: str='NULL') -> str:
     if user_id.lower() == 'null':
         user_id = 'is null'
     else:

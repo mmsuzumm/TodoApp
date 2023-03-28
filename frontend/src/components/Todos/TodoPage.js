@@ -13,6 +13,7 @@ export default function TodoPage() {
   const INSERT_API = 'http://127.0.0.1:5000/todo_insert';
   const DELETE_API = 'http://127.0.0.1:5000/todo_delete';
   const CLEAR_API = 'http://127.0.0.1:5000/todo_clear';
+  const UPDATE_STATUS_API = 'http://127.0.0.1:5000/todo_update_status';
 
   useEffect(() => {
     fetch(GET_API)
@@ -69,14 +70,30 @@ export default function TodoPage() {
     insertTodo(newTodo);
   };
 
-  const toggleTodoHandler = (index) => {
-    setTodos(
-      todos.map((todo) =>
-        index === todo.id
-          ? { ...todo, isComplited: !todo.isComplited }
-          : { ...todo }
-      )
-    );
+  const toggleTodoHandler = (todo) => {
+    const id = todo.id;
+    const isComplited = todo.isComplited;
+
+    const dataToSend = { id, isComplited };
+
+    const requestOptions = {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dataToSend),
+    };
+    fetch(UPDATE_STATUS_API, requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        setTodos(
+          todos.map((todo) =>
+            data[0].id === todo.id
+              ? { ...todo, isComplited: !todo.isComplited }
+              : { ...todo }
+          )
+        );
+      });
   };
 
   const deleteTodoHandler = (index) => {
@@ -99,7 +116,11 @@ export default function TodoPage() {
     <div className={styles.todoPageContainer}>
       <h1>Todo App</h1>
       <TodoForm addTodo={addTodoHandler} />
-      <ClearAllConfirmation active={modalActive} setActive={setModalActive} resetTodo={resetTodoHandler}/>
+      <ClearAllConfirmation
+        active={modalActive}
+        setActive={setModalActive}
+        resetTodo={resetTodoHandler}
+      />
       {!!todos.length && (
         <TodosActions
           completedTodosExists={!!completedTodosCount}

@@ -1,6 +1,6 @@
 '''Query to select todos'''
 
-def query(user_id: str='NULL'):
+def query(user_id: str='NULL') -> str:
     if user_id.lower() == 'null':
         user_id = 'is null'
     else:
