@@ -1,4 +1,4 @@
-'''Query to select todos'''
+'''Query to delete all todos'''
 
 def query(user_id: str='NULL'):
     if user_id.lower() == 'null':
@@ -9,9 +9,9 @@ def query(user_id: str='NULL'):
 
     return(
     f'''
-    SELECT id, user_id, is_complited, todo_text 
-    FROM todos
-    WHERE user_id {user_id};
+    DELETE FROM todos where 
+    user_id {user_id} and
+    id IS NOT NULL
     '''
     )
 
