@@ -8,6 +8,7 @@ import ClearAllConfirmation from './ClearAllConfirmation';
 export default function TodoPage() {
   const [todos, setTodos] = useState([]);
   const [modalActive, setModalActive] = useState(false);
+  const [deleteChecker, setDeleteChecker] = useState(false);
 
   const GET_API = 'http://127.0.0.1:5000/todos';
   const INSERT_API = 'http://127.0.0.1:5000/todo_insert';
@@ -19,7 +20,7 @@ export default function TodoPage() {
     fetch(GET_API)
       .then((response) => response.json())
       .then((json) => setTodos(json));
-  }, []);
+  }, [deleteChecker]);
 
   const insertTodo = (todo) => {
     const requestOptions = {
@@ -43,11 +44,10 @@ export default function TodoPage() {
       },
       body: JSON.stringify(dataToSend),
     };
-    fetch(DELETE_API, requestOptions)
-      .then((response) => response.json())
-      .then((data) => {
-        setTodos(todos.filter((todo) => todo.id !== data[0].id));
-      }); // data[0] == object like {id: 1, user_id: 1}
+
+    fetch(DELETE_API, requestOptions).then(() => {
+      setDeleteChecker(deleteChecker ? false : true);
+    });
   };
 
   const clearTodos = () => {
@@ -57,9 +57,7 @@ export default function TodoPage() {
         'Content-Type': 'application/json',
       },
     };
-    fetch(CLEAR_API, requestOptions)
-      .then((response) => response.json())
-      .then((data) => console.log(data));
+    fetch(CLEAR_API, requestOptions);
   };
 
   const addTodoHandler = (todoText) => {
@@ -107,7 +105,9 @@ export default function TodoPage() {
   };
 
   const deleteCompletedTodosHandler = () => {
-    setTodos(todos.filter((todo) => !todo.isComplited));
+    const complited_todos = todos.filter((todo) => todo.isComplited);
+
+    deleteTodo(complited_todos.map((todo) => todo.id));
   };
 
   const completedTodosCount = todos.filter((todo) => todo.isComplited).length;

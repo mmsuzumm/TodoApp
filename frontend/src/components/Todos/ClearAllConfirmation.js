@@ -23,8 +23,8 @@ export default function ClearAllConfirmation({ active, setActive, resetTodo }) {
       >
         Are you sure you want to delete all todos?
         <div className={styles.modalButtons}>
-          <Button onClick={() => clear()}>Yes</Button>
           <Button onClick={() => setActive(false)}>No</Button>
+          <Button onClick={() => clear()}>Yes</Button>
         </div>
       </div>
     </div>

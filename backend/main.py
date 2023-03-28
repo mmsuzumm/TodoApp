@@ -36,10 +36,10 @@ def todo_insert() -> json:
 @app.route("/todo_delete", methods=['DELETE'])
 def todo_delete() -> json:
     received_json = json.loads(request.data.decode('utf8'))
+    print(received_json)
     index = received_json['id']
-    data = todo_deleter(index)
+    todo_deleter(index)
     response = app.response_class(
-        response=data,
         status=200,
         mimetype='application/json'
     )
