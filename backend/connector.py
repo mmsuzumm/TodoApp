@@ -1,9 +1,8 @@
 import psycopg2
 from psycopg2.extras import RealDictCursor # return valid json object
 from credentials import * 
-from sql_queries import select, insert, update_status, delete, delete_all
 from utils.format_converter import format_converter
-
+from sql_queries.todo_queries import delete, delete_all, update_status, select_all, new_todo
 
 def open_connection():
     conn = psycopg2.connect(
@@ -15,48 +14,34 @@ def open_connection():
     cur = conn.cursor(cursor_factory=RealDictCursor)
     return conn, cur
 
+def db_operation_todos(operation_type: str, 
+                  id: int | list=None, 
+                  user_id: int=None,
+                  is_completed: bool=None,
+                  todo_text: str=None
+                 ):
+    '''set operation_type like 
+    'select_all' - select all todos from db
+    'new_todo' - create new todo
+    'update_status' - set status for todo by id
+    'delete' - delete one or list of todos
+    'delete_all' - delete all todos
+    '''
 
-def todos_records() -> str:
     conn, cur = open_connection()
-    cur.execute(select.query())
-    records = cur.fetchall()
-    cur.close()
-    conn.close()
-    return format_converter(records)
-
-
-def todo_writer(is_completed: str, todo_text: str) -> str:
-    conn, cur = open_connection()
-    cur.execute(insert.query(is_completed, todo_text))
-    conn.commit()
-    new_record = cur.fetchall()
-    cur.close()
-    conn.close()
-    return format_converter(new_record)
-
-def todo_status_updater(id: int, is_completed: bool) -> str:
-    print('start_update')
-    conn, cur = open_connection()
-    cur.execute(update_status.query(id, is_completed))
-    conn.commit()
-    response = cur.fetchall()
-    cur.close()
-    conn.close()
-    return format_converter(response)
-
-def todo_deleter(index: int | list) -> str:
-    conn, cur = open_connection()
-    cur.execute(delete.query(index))
+    if operation_type == 'select_all':
+        cur.execute(select_all)
+    if operation_type == 'new_todo':
+        cur.execute(new_todo, (is_completed, todo_text,))
+    if operation_type == 'update_status':
+        cur.execute(update_status, (id,))
+    if operation_type == 'delete':
+        cur.execute(delete, (id,))
+    if operation_type == 'delete_all':
+        cur.execute(delete_all)
+        
     conn.commit()
     response = cur.fetchall()
     cur.close()
     conn.close()
     return format_converter(response)
-
-def todo_delete_all():
-    conn, cur = open_connection()
-    cur.execute(delete_all.query())
-    conn.commit()
-    cur.close()
-    conn.close()
-    return 'Your diary is cleared'
