@@ -8,17 +8,19 @@ import ClearAllConfirmation from './ClearAllConfirmation';
 export default function TodoPage() {
   const [todos, setTodos] = useState([]);
   const [modalActive, setModalActive] = useState(false);
+  const [deleteChecker, setDeleteChecker] = useState(false);
 
   const GET_API = 'http://127.0.0.1:5000/todos';
-  const INSERT_API = 'http://127.0.0.1:5000/todo_insert';
+  const INSERT_API = 'http://127.0.0.1:5000/new_todo';
   const DELETE_API = 'http://127.0.0.1:5000/todo_delete';
   const CLEAR_API = 'http://127.0.0.1:5000/todo_clear';
+  const UPDATE_STATUS_API = 'http://127.0.0.1:5000/todo_update_status';
 
   useEffect(() => {
     fetch(GET_API)
       .then((response) => response.json())
       .then((json) => setTodos(json));
-  }, []);
+  }, [deleteChecker]);
 
   const insertTodo = (todo) => {
     const requestOptions = {
@@ -42,11 +44,10 @@ export default function TodoPage() {
       },
       body: JSON.stringify(dataToSend),
     };
-    fetch(DELETE_API, requestOptions)
-      .then((response) => response.json())
-      .then((data) => {
-        setTodos(todos.filter((todo) => todo.id !== data[0].id));
-      }); // data[0] == object like {id: 1, user_id: 1}
+
+    fetch(DELETE_API, requestOptions).then(() => {
+      setDeleteChecker(deleteChecker ? false : true);
+    });
   };
 
   const clearTodos = () => {
@@ -56,27 +57,39 @@ export default function TodoPage() {
         'Content-Type': 'application/json',
       },
     };
-    fetch(CLEAR_API, requestOptions)
-      .then((response) => response.json())
-      .then((data) => console.log(data));
+    fetch(CLEAR_API, requestOptions);
   };
 
   const addTodoHandler = (todoText) => {
     const newTodo = {
       todoText,
-      isComplited: false,
+      isCompleted: false,
     };
     insertTodo(newTodo);
   };
 
-  const toggleTodoHandler = (index) => {
-    setTodos(
-      todos.map((todo) =>
-        index === todo.id
-          ? { ...todo, isComplited: !todo.isComplited }
-          : { ...todo }
-      )
-    );
+  const toggleTodoHandler = (todo) => {
+    const id = todo.id;
+    const isCompleted = todo.isCompleted;
+    const dataToSend = { id, isCompleted };
+    const requestOptions = {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dataToSend),
+    };
+    fetch(UPDATE_STATUS_API, requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        setTodos(
+          todos.map((todo) =>
+            data[0].id === todo.id
+              ? { ...todo, isCompleted: !todo.isCompleted }
+              : { ...todo }
+          )
+        );
+      });
   };
 
   const deleteTodoHandler = (index) => {
@@ -90,16 +103,22 @@ export default function TodoPage() {
   };
 
   const deleteCompletedTodosHandler = () => {
-    setTodos(todos.filter((todo) => !todo.isComplited));
+    const completed_todos = todos.filter((todo) => todo.isCompleted);
+
+    deleteTodo(completed_todos.map((todo) => todo.id));
   };
 
-  const completedTodosCount = todos.filter((todo) => todo.isComplited).length;
+  const completedTodosCount = todos.filter((todo) => todo.isCompleted).length;
 
   return (
     <div className={styles.todoPageContainer}>
       <h1>Todo App</h1>
       <TodoForm addTodo={addTodoHandler} />
-      <ClearAllConfirmation active={modalActive} setActive={setModalActive} resetTodo={resetTodoHandler}/>
+      <ClearAllConfirmation
+        active={modalActive}
+        setActive={setModalActive}
+        resetTodo={resetTodoHandler}
+      />
       {!!todos.length && (
         <TodosActions
           completedTodosExists={!!completedTodosCount}

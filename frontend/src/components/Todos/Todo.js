@@ -6,7 +6,7 @@ export default function Todo({ todo, deleteTodo, toggleTodo }) {
   return (
     <div
       className={`${styles.todoContainer} ${
-        todo.isComplited ? styles.completedTodo : ''
+        todo.isCompleted ? styles.completedTodo : ''
       }`}
     >
       <RiTodoLine className={styles.todoIcon} />
@@ -20,7 +20,7 @@ export default function Todo({ todo, deleteTodo, toggleTodo }) {
       <FaCheck
         className={styles.checkIcon}
         onClick={() => {
-          toggleTodo(todo.id);
+          toggleTodo(todo);
         }}
       />
     </div>
