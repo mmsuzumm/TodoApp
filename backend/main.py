@@ -19,8 +19,8 @@ def todos() -> json:
     )
     return response
 
-@app.route("/new_todo", methods=['POST'])
-def new_todo() -> json:
+@app.route("/todo_create", methods=['POST'])
+def todo_create() -> json:
     received_json = json.loads(request.data.decode('utf8'))
     is_completed = received_json['isCompleted']
     todo_text = received_json['todoText']

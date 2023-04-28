@@ -11,7 +11,7 @@ export default function TodoPage() {
   const [deleteChecker, setDeleteChecker] = useState(false);
 
   const GET_API = 'http://127.0.0.1:5000/todos';
-  const INSERT_API = 'http://127.0.0.1:5000/new_todo';
+  const INSERT_API = 'http://127.0.0.1:5000/todo_create';
   const DELETE_API = 'http://127.0.0.1:5000/todo_delete';
   const CLEAR_API = 'http://127.0.0.1:5000/todo_clear';
   const UPDATE_STATUS_API = 'http://127.0.0.1:5000/todo_update_status';
